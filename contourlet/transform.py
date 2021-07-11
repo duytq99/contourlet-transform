@@ -30,5 +30,5 @@ def contourlet_recompose(low_band, sub_bands, name='thanh'):
     # 9-7 filters
     h, g = filters.lp_filters()
     # Laplacian recompose
-    img = operations.lp_rec(high, low_band, h, g)
+    img = operations.lp_rec(low_band, high, h, g)
     return img 
