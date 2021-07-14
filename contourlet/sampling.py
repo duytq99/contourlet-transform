@@ -30,6 +30,7 @@ def q_sampling(img, q_mode='q0', op_mode='down'):
 
 if __name__ == '__main__':
     
+    
     def to_image(tensor):
         return tensor.squeeze().permute(1, 2, 0).detach().cpu().numpy()
 
@@ -37,16 +38,22 @@ if __name__ == '__main__':
     tensor = torch.tensor(cv2.imread('image/lena.png',1) /255.0, dtype=torch.float32).permute(2, 0, 1).unsqueeze(0)
     cv2.imshow('original',to_image(tensor))
     print(tensor.shape)
-   
-    tensor_down = q_sampling(tensor, q_mode='q0', op_mode='down')
+    
+    _, _, h, w = tensor.shape
+    # padding_per = torch.nn.ReflectionPad2d((w//2,w//2,h//2,h//2))
+    padding_per = torch.nn.ZeroPad2d((w//2,w//2,h//2,h//2))
+    
+    tensor = padding_per(tensor)
+    print(tensor.shape)
+    tensor_down = q_sampling(tensor, q_mode='q0', op_mode='up')
     cv2.imshow('a' ,to_image(tensor_down))
-    tensor_down = q_sampling(tensor_down, q_mode='q0', op_mode='up')
+    tensor_down = q_sampling(tensor_down, q_mode='q1', op_mode='up')
 
     print(tensor_down.shape)
     cv2.imshow('up/down' ,to_image(tensor_down))
     
     from skimage import metrics
-    print(metrics.peak_signal_noise_ratio(tensor.numpy(), tensor_down.numpy()))
+    # print(metrics.peak_signal_noise_ratio(tensor.numpy(), tensor_down.numpy()))
     
     cv2.waitKey(0)
     cv2.destroyAllWindows()

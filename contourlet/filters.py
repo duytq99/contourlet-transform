@@ -35,32 +35,32 @@ def dfb_filters(mode = None, name=None):
             raise NotImplementedError("Mode is not available")
     elif name=='thanh':
         if mode=='r':
-            g0 = np.array([[0, -1, 0],
-                        [-1, -4, -1],
-                        [0, -1, 0]]).astype(np.float32)/4.0
+            g0 = - np.array([[0, -1, 0],
+                            [-1, -4, -1],
+                            [0, -1, 0]]).astype(np.float32)/4.0
             g0 = torch.from_numpy(g0).expand(3, 1, 3, 3)
             g1 = np.array([[0, 0, 0, 0, 0, 0, 0],
-                        [0, 0, 0, 0, -1, 0, 0],
-                        [0, 0, 0, -2, -4, -2, 0],
-                        [0, 0, -1, -4, 28, -4, -1],
-                        [0, 0, 0, -2, -4, -2, 0],
-                        [0, 0, 0, 0, -1, 0, 0],
-                        [0, 0, 0, 0, 0, 0, 0]]).astype(np.float32)/32.0
+                            [0, 0, 0, 0, -1, 0, 0],
+                            [0, 0, 0, -2, -4, -2, 0],
+                            [0, 0, -1, -4, 28, -4, -1],
+                            [0, 0, 0, -2, -4, -2, 0],
+                            [0, 0, 0, 0, -1, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0]]).astype(np.float32)/32.0
             g1 = torch.from_numpy(g1).expand(3, 1, 7, 7)
             return g0.to(device), g1.to(device)
         elif mode=='d':
             h0 = np.array([[0, 0, -1, 0, 0],
-                    [0, -2, 4, -2, 0],
-                    [-1, 4, 28, 4, -1],
-                    [0, -2, 4, -2, 0],
-                    [0, 0, -1, 0, 0]]).astype(np.float32)/32.0
+                            [0, -2, 4, -2, 0],
+                            [-1, 4, 28, 4, -1],
+                            [0, -2, 4, -2, 0],
+                            [0, 0, -1, 0, 0]]).astype(np.float32)/32.0
             h0 = torch.from_numpy(h0).expand(3, 1, 5, 5)
         
             h1 = np.array([[0, 0, 0, 0, 0 ],
-                    [0, -1, 0, 0, 0],
-                    [-1, 4, -1, 0, 0],
-                    [0, -1, 0, 0, 0],
-                    [0, 0, 0, 0, 0]]).astype(np.float32)/4.0
+                            [0, -1, 0, 0, 0],
+                            [-1, 4, -1, 0, 0],
+                            [0, -1, 0, 0, 0],
+                            [0, 0, 0, 0, 0]]).astype(np.float32)/4.0
             h1 = torch.from_numpy(h1).expand(3, 1, 5, 5)
             return h0.to(device), h1.to(device)
         else:
@@ -77,10 +77,10 @@ if __name__ == '__main__':
     print(g)
     
     mode = 'r'
-    name = 'haar'
+    name = 'thanh'
     h0, h1 = dfb_filters(mode = mode, name=name)
     print('DFB filters')
-    print('mode decompose' if mode=='d' else 'mode recompose')
+    print('mode decompose' if mode=='r' else 'mode recompose')
     print('haar filters' if name=='haar' else 'thanh filters')
     print('h0 shape: ', h0.shape)
     print(h0)

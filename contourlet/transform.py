@@ -15,7 +15,7 @@ def contourlet_decompose(img, name='thanh'):
     # 9-7 filters
     h, g = filters.lp_filters()
     # Laplacian Pyramid decompose
-    low_band, high = operations.lp_dec(img, h, g)
+    low_band, high = operations.lp_dec_conv1d(img, h, g)
     # DFB filters
     h0, h1 = filters.dfb_filters(mode='d', name=name)
     # DFB decompose
@@ -30,5 +30,21 @@ def contourlet_recompose(low_band, sub_bands, name='thanh'):
     # 9-7 filters
     h, g = filters.lp_filters()
     # Laplacian recompose
-    img = operations.lp_rec(low_band, high, h, g)
+    img = operations.lp_rec_conv1d(low_band, high, h, g)
     return img 
+
+def contourlet_only_LP(img):
+    # 9-7 filters
+    h, g = filters.lp_filters()
+    # Laplacian Pyramid decompose
+    low_band, high = operations.lp_dec_conv1d(img, h, g)
+    img = operations.lp_rec_conv1d(low_band, high, h, g)
+    return img
+
+def contourlet_only_DFB(img):
+    h0, h1 = filters.dfb_filters(mode='d', name='thanh')
+    g0, g1 = filters.dfb_filters(mode='r', name='thanh')
+    sub_bands = operations.dfb_dec(img, h0, h1, name='thanh')
+    img = operations.dfb_rec(sub_bands, g0, g1, name='thanh')
+    return img
+    
